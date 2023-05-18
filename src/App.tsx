@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.scss';
 import Filter from './components/filter';
+import Loader from './components/loader';
 import Products from './components/products';
 import { getProductsAPI, getProductsStore } from './services/product'
 import { IProduct, DropDownLOV } from './models/index'
@@ -10,6 +11,8 @@ import { filterOnlyFavorites, filterAscendingProducts, filterDescendingProducts 
 
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [_products, _setProducts] = useState<IProduct[]>([]);
   const [products, setProducts] = useState<IProduct[]>([]);
 
@@ -23,6 +26,7 @@ function App() {
 
   // init//
   useEffect(() => {
+    setIsLoading(true);
     Promise.all([getProductsAPI(), getProductsStore()]).then(([productsAPI, productsStore]) => {
       const arrayOfIds: number[] = productsStore.map((obj) => obj.id);
       const allProducts: IProduct[] = productsAPI.map((prod) => ({
@@ -33,6 +37,8 @@ function App() {
       setProducts([...allProducts]);
     }).catch(error => {
       // Handle the error here
+    }).finally(() => {
+      setIsLoading(false);
     });
   }, []);
   ///
@@ -67,10 +73,10 @@ function App() {
     const remapProd = (products: IProduct[], _products: IProduct[]) => {
       const productsAPI: IProduct[] = [..._products];
       const favoriteProductsIDs = products
-      .filter((prod) => prod.isFavorite === true ? prod.id : null)
-      .map((item) => {
-        return item.id
-      })
+        .filter((prod) => prod.isFavorite === true ? prod.id : null)
+        .map((item) => {
+          return item.id
+        })
 
       return productsAPI.map((prod) => {
         if (favoriteProductsIDs.includes(prod.id)) {
@@ -85,22 +91,29 @@ function App() {
   }, [setFilter, filter]);
   //
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-gray-200">
-      <div className="py-4">
-        <div className="container mx-auto text-center">
-          <div className="flex justify-end container">
-            <Filter data-testid="filter" name={'filterControl'} label={'Filter'} value={filter} options={filterLOV}
-              onChange={handleChangeFilter}></Filter>
-            <div className="grid grid-cols-3 gap-4">
-            </div>
-          </div>
-          <div className="row">
-            <div className="col">
-              <Products products={products} onChangeProduct={handleChangeProduct}></Products>
+    <div>
+      {isLoading}
+      {isLoading ? (
+        <Loader></Loader>
+      ) : (
+        <div className="min-h-screen flex flex-col justify-between bg-gray-200">
+          <div className="py-4">
+            <div className="container mx-auto px-4 text-center">
+              <div className="flex justify-end container">
+                <Filter data-testid="filter" name={'filterControl'} label={'Filter'} value={filter} options={filterLOV}
+                  onChange={handleChangeFilter}></Filter>
+                <div className="grid grid-cols-3 gap-4">
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <Products products={products} onChangeProduct={handleChangeProduct}></Products>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
