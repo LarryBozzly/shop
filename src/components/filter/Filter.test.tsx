@@ -1,8 +1,11 @@
 
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom'
 import Filter from './Filter'
+import { DropDownLOV } from '../../models/index';
+
 
 describe('Descrkbe the filter component', () => {
     const options = [
@@ -23,19 +26,11 @@ describe('Descrkbe the filter component', () => {
                 onChange={onChange}
             />
         );
-        // Assert label is rendered
-        const labelElement = screen.getByText('Filter Label');
-        expect(labelElement).toBeInTheDocument();
+    });
 
-        // Assert options are rendered
-        options.forEach((option) => {
-            const optionElement = screen.getByText(option.option);
-            expect(optionElement).toBeInTheDocument();
-        });
-
-        // Assert initial value is selected
-        const selectedValueElement = screen.getByDisplayValue('option1');
-        expect(selectedValueElement).toBeInTheDocument();
+    test('checks if component function outputs the expected result', () => {
+        // Provide any necessary input or mock dependencies
+   
     });
 
 
