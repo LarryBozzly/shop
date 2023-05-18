@@ -3,9 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Products from './Products';
 import { IProduct } from '../../models/index';
 
-test('Test if the component is rendered', () => {
-    // Create a mock onChangeProduct function
 
+describe('Product component', () => {
     const mockProducts: IProduct[] = [
         {
             "id": 5,
@@ -23,5 +22,21 @@ test('Test if the component is rendered', () => {
         // Define mock product objects here
     ];
 
-    render(<Products products={mockProducts} onChangeProduct={() => { }} />);
+    test('Test if the price is rendered', () => {
+        // Create a mock onChangeProduct function
+        const { container } = render(<Products products={mockProducts} onChangeProduct={() => { }} />);
+
+        const priceHeader: any = container.querySelector('.css-19r320q-MuiTypography-root');
+        expect(priceHeader.textContent).toMatch(/Price/i);
+    })
+
+    test('Test if the favorite button is vibile to the user', () => {
+        render(<Products products={mockProducts} onChangeProduct={() => { }} />);
+        const itemElement = screen.getByTestId('FavoriteIcon')
+        expect(itemElement).toBeInTheDocument();
+    })
+
 })
+
+
+

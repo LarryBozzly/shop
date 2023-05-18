@@ -7,7 +7,7 @@ import Filter from './Filter'
 import { DropDownLOV } from '../../models/index';
 
 
-describe('Descrkbe the filter component', () => {
+describe('Filter Component', () => {
     const options = [
         { option: 'Option 1', value: 'option1' },
         { option: 'Option 2', value: 'option2' },

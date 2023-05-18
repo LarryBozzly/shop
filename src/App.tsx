@@ -89,7 +89,7 @@ function App() {
       <div className="py-4">
         <div className="container mx-auto text-center">
           <div className="flex justify-end container">
-            <Filter name={'filterControl'} label={'Filter'} value={filter} options={filterLOV}
+            <Filter data-testid="filter" name={'filterControl'} label={'Filter'} value={filter} options={filterLOV}
               onChange={handleChangeFilter}></Filter>
             <div className="grid grid-cols-3 gap-4">
             </div>
